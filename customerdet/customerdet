@@ -1,0 +1,413 @@
+import ttkbootstrap as ttk
+from ttkbootstrap.tableview import Tableview
+from ttkbootstrap.constants import *
+import sqlite3,json
+from tkinter import *
+import ttkbootstrap as tb
+import os,openpyxl
+# from tkinter import Tk
+from tkinter.filedialog import asksaveasfilename
+from ttkbootstrap import Window, Style
+import ttkbootstrap as tb
+
+def change_theme(theme_name):
+    style.theme_use(theme_name)
+
+# tb.Window(themename="solar")
+root = tb.Window()
+root.geometry("1050x550")  # width and height
+root.resizable(FALSE,FALSE)
+root.title("Customer Data")
+
+style = Style(theme='solar')  # Set the initial theme
+
+# Create a function to change the theme when the button is clicked
+theme_options = ['flatly', 'cyborg', 'cosmo', 'darkly', 'journal', 'solar', 'superhero', 'morph', 'yeti', 'united', 'sandstone', 'pulse', 'minty', 'lumen', 'litera', 'flatly']
+
+# Create a label to describe the theme changer
+label = tb.Label(root, text="Change Theme")
+
+# Create a dropdown menu for theme selection
+theme_var = tb.StringVar()
+theme_var.set(style.theme_use())  # Set the initial value to the current theme
+theme_menu = tb.OptionMenu(root, theme_var, *theme_options, command=lambda x: change_theme(theme_var.get()))
+
+# Create a button to apply the selected theme
+apply_button = tb.Button(root, text="Apply Theme",style='success.Outline.TButton', command=lambda: change_theme(theme_var.get()))
+
+# Place the label, theme menu, and button on the right side
+label.pack(side="right")
+label.place(x=950,y=15)
+theme_menu.pack(side="right")
+theme_menu.place(x=845,y=10)
+apply_button.pack(side="right")
+apply_button.place(x=720,y=10)
+
+d = open('path.json')
+
+# returns JSON object as
+# a dictionary
+data = json.load(d)
+
+filepathof_database=data['filepath']
+
+print(filepathof_database)
+
+con1 = sqlite3.connect(filepathof_database+"\pingtowinggz.db")
+
+cur1 = con1.cursor()
+
+cur1.execute("SELECT id,point_add,current_points,mobile_number,created_on,point_type,bill_amount,invoice_no FROM customer_point_transaction")
+
+row = cur1.fetchall()
+
+
+
+
+conn = sqlite3.connect(filepathof_database+'\pingtowinggz.db')
+cur = conn.cursor()
+cur.execute("SELECT COUNT(*) as count_pet FROM customer_detail")
+conn.commit()
+s=cur.fetchall()
+
+cur1 = conn.cursor()
+cur1.execute("SELECT COUNT(*) as count_pet FROM customer_detail")
+conn.commit()
+totalamo=cur1.fetchall()
+
+
+conn = sqlite3.connect(filepathof_database+'\pingtowinggz.db')
+cur = conn.cursor()
+
+import datetime
+x='{dt.month}/{dt.day}/{dt.year}'.format(dt = datetime.datetime.now())
+
+cur2 = conn.cursor()
+cur2.execute("SELECT SUM(bill_amount) FROM customer_point_transaction")
+conn.commit()
+totalamo=cur2.fetchall()
+totalamount=str(totalamo[0])[1:-2]
+
+mete=tb.Meter(root,bootstyle="success",
+subtext="Total Customer",
+border="2px",
+interactive=True,
+stripethickness=10,
+amounttotal=str(s[0])[1:-2],
+amountused=str(s[0])[1:-2],
+metersize=150,)
+mete.place(x=868,y=60)
+
+mq=tb.Meter(root,bootstyle="success",
+subtext="Total Sales",
+border="2px",
+interactive=True,
+stripethickness=10,
+textleft="₹",
+amounttotal=int(totalamount),
+amountused=int(totalamount),
+metersize=150,)
+mq.place(x=868,y=220)
+
+import datetime
+x='{dt.month}/{dt.day}/{dt.year}'.format(dt = datetime.datetime.now())
+
+cur2 = conn.cursor()
+cur2.execute("SELECT sum(bill_amount) from customer_point_transaction WHERE created_on='"+x+"'")
+conn.commit()
+todayamo=cur2.fetchall()
+todayamount=str(todayamo[0])[1:-2]
+#print(todayamount)
+
+
+if todayamount=="None":
+	todayamount1="0"
+
+	mq1=tb.Meter(root,bootstyle="success",
+	subtext="Today Sales",
+	border="2px",
+	interactive=True,
+	stripethickness=10,
+	textleft="₹",
+	amounttotal=100,
+	amountused=0,
+	metersize=150,)
+	mq1.place(x=868,y=380)
+else:
+	todayamount1=str(todayamo[0])[1:-2]
+	mq1=tb.Meter(root,bootstyle="success",
+	subtext="Today Sales",
+	border="2px",
+	interactive=True,
+	stripethickness=10,
+	textleft="₹",
+	amounttotal=int(todayamount1),
+	amountused=int(todayamount1),
+	metersize=150,)
+	mq1.place(x=868,y=380)
+
+
+
+from datetime import date
+today = str(date.today())
+print(today)
+
+l1 = [
+    {"text": "Id", "stretch": False},
+    "Point Added",
+    "Current Point",
+    "Mobile No.",
+    "Created On",
+    {"text":"Point Type"},
+    {"text":"Bill Amount"},
+    {"text": "Invoice Number", "stretch": False}
+]
+r_set = row
+
+dv = ttk.tableview.Tableview(
+    master=root,
+    paginated=True,
+    coldata=l1,
+    rowdata=r_set,
+    searchable=True,
+    bootstyle=SUCCESS,
+    pagesize=20,
+    height=20,
+)
+dv.grid(row=0, column=0, padx=10, pady=5)
+dv.autofit_columns()
+
+def mostvisitmonth():
+    conn = sqlite3.connect(filepathof_database+'\pingtowinggz.db')
+    cur = conn.cursor()
+    cur.execute("SELECT (SELECT id from customer_detail WHERE mobile=mobile_number) as ID ,(SELECT points FROM customer_detail WHERE mobile=mobile_number) as TOTAL_POINT,(SELECT name FROM customer_detail WHERE mobile=mobile_number) as NAME,mobile_number, COUNT(*) AS visit_count,created_on,sum(bill_amount),point_type FROM customer_point_transaction WHERE strftime('%Y-%m', created_on) = strftime('%Y-%m', 'now', 'localtime') AND created_on <= DATE('now', 'localtime') GROUP BY mobile_number ORDER BY visit_count DESC LIMIT 20;")
+    conn.commit()
+    s=cur.fetchall()
+    results=s
+    #from datetime import date
+    #today = str(date.today())
+    #print(today)
+
+    l1 = [
+    {"text": "ID", "stretch": False},
+    "Total Point",
+    "Name",
+    "Mobile No.",
+    "No. of visit",
+    "Created On",
+    {"text":"TOTAL BILL AMOUNT"},
+    "POINT TYPE"
+]
+    r_set = results
+
+    dv = ttk.tableview.Tableview(
+        master=root,
+        paginated=True,
+        coldata=l1,
+        rowdata=r_set,
+        searchable=True,
+        bootstyle=SUCCESS,
+        pagesize=20,
+        height=20,
+    )
+    dv.grid(row=0, column=0, padx=10, pady=5)
+    dv.autofit_columns()
+
+def weekvisit():
+    conn = sqlite3.connect(filepathof_database+'\pingtowinggz.db')
+    cur = conn.cursor()
+    cur.execute("SELECT id,point_add,current_points,mobile_number,created_on,point_type,bill_amount,invoice_no FROM customer_point_transaction WHERE created_on >= DATE('now', '-7 days') AND created_on <= DATE('now');")
+    conn.commit()
+    s=cur.fetchall()
+    results=s
+    #from datetime import date
+    #today = str(date.today())
+    #print(today)
+
+    l1 = [
+    {"text": "Id", "stretch": False},
+    "Point Added",
+    "Current Point",
+    "Mobile No.",
+    "Created On",
+    {"text":"Point Type"},
+    {"text":"Bill Amount"},
+    {"text": "Invoice Number", "stretch": False},
+    {"text":"Remark"}
+]
+    r_set = results
+
+    dv = ttk.tableview.Tableview(
+        master=root,
+        paginated=True,
+        coldata=l1,
+        rowdata=r_set,
+        searchable=True,
+        bootstyle=SUCCESS,
+        pagesize=20,
+        height=20,
+    )
+    dv.grid(row=0, column=0, padx=10, pady=5)
+    dv.autofit_columns()
+
+def monthvisit():
+    conn = sqlite3.connect(filepathof_database+'\pingtowinggz.db')
+    cur = conn.cursor()
+    cur.execute("SELECT id,point_add,current_points,mobile_number,created_on,point_type,bill_amount,invoice_no FROM customer_point_transaction where strftime('%Y-%m', created_on) = strftime('%Y-%m', 'now') AND created_on <= DATE('now', 'localtime');")
+    conn.commit()
+    s=cur.fetchall()
+    results=s
+    #from datetime import date
+    #today = str(date.today())
+    #print(today)
+
+    l1 = [
+    {"text": "Id", "stretch": False},
+    "Point Added",
+    "Current Point",
+    "Mobile No.",
+    "Created On",
+    {"text":"Point Type"},
+    {"text":"Bill Amount"},
+    {"text": "Invoice Number", "stretch": False},
+    {"text":"Remark"}
+]
+    r_set = results
+
+    dv = ttk.tableview.Tableview(
+        master=root,
+        paginated=True,
+        coldata=l1,
+        rowdata=r_set,
+        searchable=True,
+        bootstyle=SUCCESS,
+        pagesize=20,
+        height=20,
+    )
+    dv.grid(row=0, column=0, padx=10, pady=5)
+    dv.autofit_columns()
+
+def topsellinmonth():
+    conn = sqlite3.connect(filepathof_database+'\pingtowinggz.db')
+    cur = conn.cursor()
+    cur.execute("SELECT id,point_add,current_points,mobile_number,created_on,point_type,bill_amount,invoice_no FROM customer_point_transaction where strftime('%Y-%m', created_on) = strftime('%Y-%m', 'now') AND created_on <= DATE('now', 'localtime') ORDER by bill_amount DESC;")
+    conn.commit()
+    s=cur.fetchall()
+    results=s
+    #from datetime import date
+    #today = str(date.today())
+    #print(today)
+
+    l1 = [
+    {"text": "Id", "stretch": False},
+    "Point Added",
+    "Current Point",
+    "Mobile No.",
+    "Created On",
+    {"text":"Point Type"},
+    {"text":"Bill Amount"},
+    {"text": "Invoice Number", "stretch": False},
+]
+    r_set = results
+
+    dv = ttk.tableview.Tableview(
+        master=root,
+        paginated=True,
+        coldata=l1,
+        rowdata=r_set,
+        searchable=True,
+        bootstyle=SUCCESS,
+        pagesize=20,
+        height=20,
+    )
+    dv.grid(row=0, column=0, padx=10, pady=5)
+    dv.autofit_columns()
+
+def selecteddatevisit():
+    conn = sqlite3.connect(filepathof_database+'\pingtowinggz.db')
+    cur = conn.cursor()
+    cur.execute("SELECT id,point_add,current_points,mobile_number,created_on,point_type,bill_amount,invoice_no FROM customer_point_transaction where strftime('%Y-%m', created_on) = strftime('%Y-%m', 'now') AND created_on <= DATE('now', 'localtime') ORDER by bill_amount DESC;")
+    conn.commit()
+    s=cur.fetchall()
+    results=s
+    #from datetime import date
+    #today = str(date.today())
+    #print(today)
+
+    l1 = [
+    {"text": "Id", "stretch": False},
+    "Point Added",
+    "Current Point",
+    "Mobile No.",
+    "Created On",
+    {"text":"Point Type"},
+    {"text":"Bill Amount"},
+    {"text": "Invoice Number", "stretch": False},
+]
+    r_set = results
+
+    dv = ttk.tableview.Tableview(
+        master=root,
+        paginated=True,
+        coldata=l1,
+        rowdata=r_set,
+        searchable=True,
+        bootstyle=SUCCESS,
+        pagesize=20,
+        height=20,
+    )
+    dv.grid(row=0, column=0, padx=10, pady=5)
+    dv.autofit_columns()
+
+
+button42 = Button(
+    root,
+    text = "Most Visit In month",
+    width=15,
+    compound=RIGHT,
+    command = mostvisitmonth
+    )
+#button30.grid(row=0, column=3)
+button42.place(x=50,y=475)
+
+button42 = Button(
+    root,
+    text = "top sells in month",
+    width=15,
+    compound=RIGHT,
+    command = topsellinmonth
+    )
+#button30.grid(row=0, column=3)
+button42.place(x=200,y=475)
+
+button42 = Button(
+    root,
+    text = "Visited in Month",
+    width=15,
+    compound=RIGHT,
+    command = monthvisit
+    )
+#button30.grid(row=0, column=3)
+button42.place(x=350,y=475)
+
+button42 = Button(
+    root,
+    text = "Visited In a Week",
+    width=15,
+    compound=RIGHT,
+    command = weekvisit
+    )
+#button30.grid(row=0, column=3)
+button42.place(x=500,y=475)
+
+button42 = Button(
+    root,
+    text = "Single Date Visit",
+    width=15,
+    compound=RIGHT,
+    command = selecteddatevisit
+    )
+#button30.grid(row=0, column=3)
+button42.place(x=650,y=475)
+
+root.mainloop()

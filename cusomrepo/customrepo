@@ -1,0 +1,993 @@
+import ttkbootstrap as ttk
+from ttkbootstrap.tableview import Tableview
+from ttkbootstrap.constants import *
+import sqlite3
+from tkinter import *
+import ttkbootstrap as tb
+import os,openpyxl
+from tkinter import Tk
+from tkinter.filedialog import asksaveasfilename
+from ttkbootstrap import Window, Style
+import ttkbootstrap as tb
+import json
+
+def change_theme(theme_name):
+    style.theme_use(theme_name)
+
+root = tb.Window()
+root.geometry("1050x550")  # width and height
+root.resizable(FALSE,FALSE)
+root.title("Customer Data")
+
+style = Style(theme='solar')  # Set the initial theme
+
+# Create a function to change the theme when the button is clicked
+theme_options = ['flatly', 'cyborg', 'cosmo', 'darkly', 'journal', 'solar', 'superhero', 'morph', 'yeti', 'united', 'sandstone', 'pulse', 'minty', 'lumen', 'litera', 'flatly']
+
+# Create a label to describe the theme changer
+label = tb.Label(root, text="Change Theme")
+
+# Create a dropdown menu for theme selection
+theme_var = tb.StringVar()
+theme_var.set(style.theme_use())  # Set the initial value to the current theme
+theme_menu = tb.OptionMenu(root, theme_var, *theme_options, command=lambda x: change_theme(theme_var.get()))
+
+# Create a button to apply the selected theme
+apply_button = tb.Button(root, text="Apply Theme",style='success.Outline.TButton', command=lambda: change_theme(theme_var.get()))
+
+# Place the label, theme menu, and button on the right side
+label.pack(side="right")
+label.place(x=950,y=15)
+theme_menu.pack(side="right")
+theme_menu.place(x=845,y=10)
+apply_button.pack(side="right")
+apply_button.place(x=720,y=10)
+
+d = open('path.json')
+
+# returns JSON object as
+# a dictionary
+data = json.load(d)
+
+filepathof_database=data['filepath']
+
+print(filepathof_database)
+
+
+con1 = sqlite3.connect(filepathof_database+"\pingtowinggz.db")
+
+cur1 = con1.cursor()
+
+cur1.execute("SELECT name,mobile,points,created_on,dob from customer_detail")
+
+row = cur1.fetchall()
+
+
+
+
+conn = sqlite3.connect(filepathof_database+'\pingtowinggz.db')
+cur = conn.cursor()
+cur.execute("SELECT COUNT(*) as count_pet FROM customer_detail")
+conn.commit()
+s=cur.fetchall()
+
+cur1 = conn.cursor()
+cur1.execute("SELECT COUNT(*) as count_pet FROM customer_detail")
+conn.commit()
+totalamo=cur1.fetchall()
+
+
+conn = sqlite3.connect(filepathof_database+'\pingtowinggz.db')
+cur = conn.cursor()
+
+import datetime
+x='{dt.month}/{dt.day}/{dt.year}'.format(dt = datetime.datetime.now())
+
+cur2 = conn.cursor()
+cur2.execute("SELECT SUM(points) FROM customer_detail")
+conn.commit()
+totalamo=cur2.fetchall()
+totalamount=str(totalamo[0])[1:-2]
+
+mete=tb.Meter(root,bootstyle="success",
+subtext="Total Customer",
+border="2px",
+interactive=True,
+stripethickness=10,
+amounttotal=str(s[0])[1:-2],
+amountused=str(s[0])[1:-2],
+metersize=150,)
+mete.place(x=868,y=60)
+
+
+mq=tb.Meter(root,bootstyle="success",
+subtext="Total Points",
+border="2px",
+interactive=True,
+stripethickness=10,
+textleft="₹",
+amounttotal=(int(float(totalamount))),
+amountused=(int(float(totalamount))),
+metersize=150,)
+mq.place(x=868,y=220)
+
+import datetime
+x='{dt.month}/{dt.day}/{dt.year}'.format(dt = datetime.datetime.now())
+
+cur2 = conn.cursor()
+cur2.execute("SELECT sum(points) from customer_detail WHERE created_on='"+x+"'")
+conn.commit()
+todayamo=cur2.fetchall()
+todayamount=str(todayamo[0])[1:-2]
+#print(todayamount)
+
+
+if todayamount=="None":
+	todayamount1="0"
+
+	mq1=tb.Meter(root,bootstyle="success",
+	subtext="Today Payment",
+	border="2px",
+	interactive=True,
+	stripethickness=10,
+	textleft="₹",
+	amounttotal=100,
+	amountused=0,
+	metersize=150,)
+	mq1.place(x=868,y=380)
+else:
+	todayamount1=str(todayamo[0])[1:-2]
+	mq1=tb.Meter(root,bootstyle="success",
+	subtext="Today Payment",
+	border="2px",
+	interactive=True,
+	stripethickness=10,
+	textleft="₹",
+	amounttotal=int(todayamount1),
+	amountused=int(todayamount1),
+	metersize=150,)
+	mq1.place(x=868,y=380)
+
+#===================================================================================Status
+
+def mostvisit():
+    conn = sqlite3.connect(filepathof_database+'\pingtowinggz.db')
+    cur = conn.cursor()
+    cur.execute("select mobile_number as 'Mobile Number',count(*) as VISITS from customer_point_transaction group by mobile_number order by count(*) desc LIMIT 250")
+    conn.commit()
+    s=cur.fetchall()
+    results=s
+    print(s)
+    r = Tk()
+
+    # Hide the root window
+    r.withdraw()
+
+    # Ask the user to choose a file for saving
+    file_path = asksaveasfilename(defaultextension='.xlsx')
+
+    # Check if a file path was chosen
+    if file_path:
+        # Create a new workbook
+
+        book = openpyxl.Workbook()
+        sheet = book.active
+        sheet['A1'] = 'Mobile Number'
+        sheet['B1'] = 'Points'
+        i = 1
+        for row in results:
+            i += 1
+            j = 1
+            for col in row:
+                cell = sheet.cell(row = i, column = j)
+                cell.value = col
+                j += 1
+
+        book.save(file_path)
+        conn.close()
+        #book.close(file_path)
+        print("Excel file saved successfully.")
+    else:
+        print("No file path selected.")
+    r.destroy()
+
+
+
+def button30():
+    conn = sqlite3.connect(filepathof_database+'\pingtowinggz.db')
+    cur = conn.cursor()
+    cur.execute("SELECT * FROM customer_detail ORDER by points ASC LIMIT 30")
+    conn.commit()
+    s=cur.fetchall()
+    results=s
+    print(s)
+
+    r = Tk()
+
+    # Hide the root window
+    r.withdraw()
+
+    # Ask the user to choose a file for saving
+    file_path = asksaveasfilename(defaultextension='.xlsx')
+
+    # Check if a file path was chosen
+    if file_path:
+        # Create a new workbook
+
+        book = openpyxl.Workbook()
+        sheet = book.active
+        sheet['A1'] = 'ID'
+        sheet['B1'] = 'NAME'
+        sheet['C1'] = 'MOBILE NUMBER'
+        sheet['D1'] = 'POINTS'
+        sheet['E1'] = 'CREATED ON'
+        i = 1
+        for row in results:
+            i += 1
+            j = 1
+            for col in row:
+                cell = sheet.cell(row = i, column = j)
+                cell.value = col
+                j += 1
+
+        book.save(file_path)
+        conn.close()
+        print("Excel file saved successfully.")
+    else:
+        print("No file path selected.")
+    r.destroy()
+
+
+def button20():
+    conn = sqlite3.connect(filepathof_database+'\pingtowinggz.db')
+    cur = conn.cursor()
+    cur.execute("SELECT * FROM customer_detail ORDER by points ASC LIMIT 20")
+    conn.commit()
+    s=cur.fetchall()
+    results=s
+    print(s)
+
+    r = Tk()
+
+    # Hide the root window
+    r.withdraw()
+
+    # Ask the user to choose a file for saving
+    file_path = asksaveasfilename(defaultextension='.xlsx')
+
+    # Check if a file path was chosen
+    if file_path:
+        # Create a new workbook
+
+        book = openpyxl.Workbook()
+        sheet = book.active
+        sheet['A1'] = 'ID'
+        sheet['B1'] = 'NAME'
+        sheet['C1'] = 'MOBILE NUMBER'
+        sheet['D1'] = 'POINTS'
+        sheet['E1'] = 'CREATED ON'
+        i = 1
+        for row in results:
+            i += 1
+            j = 1
+            for col in row:
+                cell = sheet.cell(row = i, column = j)
+                cell.value = col
+                j += 1
+
+        book.save(file_path)
+        conn.close()
+        print("Excel file saved successfully.")
+    else:
+        print("No file path selected.")
+    r.destroy()
+
+
+def button10():
+    conn = sqlite3.connect(filepathof_database+'\pingtowinggz.db')
+    cur = conn.cursor()
+    cur.execute("SELECT * FROM customer_detail ORDER by points ASC LIMIT 10")
+    conn.commit()
+    s=cur.fetchall()
+    results=s
+    print(s)
+
+    r = Tk()
+
+    # Hide the root window
+    r.withdraw()
+
+    # Ask the user to choose a file for saving
+    file_path = asksaveasfilename(defaultextension='.xlsx')
+
+    # Check if a file path was chosen
+    if file_path:
+        # Create a new workbook
+
+        book = openpyxl.Workbook()
+        sheet = book.active
+        sheet['A1'] = 'ID'
+        sheet['B1'] = 'NAME'
+        sheet['C1'] = 'MOBILE NUMBER'
+        sheet['D1'] = 'POINTS'
+        sheet['E1'] = 'CREATED ON'
+        i = 1
+        for row in results:
+            i += 1
+            j = 1
+            for col in row:
+                cell = sheet.cell(row = i, column = j)
+                cell.value = col
+                j += 1
+
+        book.save(file_path)
+        conn.close()
+        print("Excel file saved successfully.")
+    else:
+        print("No file path selected.")
+    r.destroy()
+
+
+#===================================================================================Status
+def button30per():
+    conn = sqlite3.connect(filepathof_database+'\pingtowinggz.db')
+    cur = conn.cursor()
+    cur.execute("SELECT * FROM customer_detail ORDER by points ASC LIMIT (30*(SELECT COUNT(*) as count_pet FROM customer_detail)/100)")
+    conn.commit()
+    s=cur.fetchall()
+    results=s
+    print(s)
+
+    r = Tk()
+
+    # Hide the root window
+    r.withdraw()
+
+    # Ask the user to choose a file for saving
+    file_path = asksaveasfilename(defaultextension='.xlsx')
+
+    # Check if a file path was chosen
+    if file_path:
+        # Create a new workbook
+
+        book = openpyxl.Workbook()
+        sheet = book.active
+        sheet['A1'] = 'ID'
+        sheet['B1'] = 'NAME'
+        sheet['C1'] = 'MOBILE NUMBER'
+        sheet['D1'] = 'POINTS'
+        sheet['E1'] = 'CREATED ON'
+        i = 1
+        for row in results:
+            i += 1
+            j = 1
+            for col in row:
+                cell = sheet.cell(row = i, column = j)
+                cell.value = col
+                j += 1
+
+        book.save(file_path)
+        conn.close()
+        print("Excel file saved successfully.")
+    else:
+        print("No file path selected.")
+    r.destroy()
+
+
+def button20per():
+    conn = sqlite3.connect(filepathof_database+'\pingtowinggz.db')
+    cur = conn.cursor()
+    cur.execute("SELECT * FROM customer_detail ORDER by points ASC LIMIT (20*(SELECT COUNT(*) as count_pet FROM customer_detail)/100)")
+    conn.commit()
+    s=cur.fetchall()
+    results=s
+    print(s)
+
+    r = Tk()
+
+    # Hide the root window
+    r.withdraw()
+
+    # Ask the user to choose a file for saving
+    file_path = asksaveasfilename(defaultextension='.xlsx')
+
+    # Check if a file path was chosen
+    if file_path:
+        # Create a new workbook
+
+        book = openpyxl.Workbook()
+        sheet = book.active
+        sheet['A1'] = 'ID'
+        sheet['B1'] = 'NAME'
+        sheet['C1'] = 'MOBILE NUMBER'
+        sheet['D1'] = 'POINTS'
+        sheet['E1'] = 'CREATED ON'
+        i = 1
+        for row in results:
+            i += 1
+            j = 1
+            for col in row:
+                cell = sheet.cell(row = i, column = j)
+                cell.value = col
+                j += 1
+
+        book.save(file_path)
+        conn.close()
+        print("Excel file saved successfully.")
+    else:
+        print("No file path selected.")
+    r.destroy()
+
+
+def button10per():
+    conn = sqlite3.connect(filepathof_database+'\pingtowinggz.db')
+    cur = conn.cursor()
+    cur.execute("SELECT * FROM customer_detail ORDER by points ASC LIMIT (10*(SELECT COUNT(*) as count_pet FROM customer_detail)/100)")
+    conn.commit()
+    s=cur.fetchall()
+    results=s
+    print(s)
+
+    r = Tk()
+
+    # Hide the root window
+    r.withdraw()
+
+    # Ask the user to choose a file for saving
+    file_path = asksaveasfilename(defaultextension='.xlsx')
+
+    # Check if a file path was chosen
+    if file_path:
+        # Create a new workbook
+
+        book = openpyxl.Workbook()
+        sheet = book.active
+        sheet['A1'] = 'ID'
+        sheet['B1'] = 'NAME'
+        sheet['C1'] = 'MOBILE NUMBER'
+        sheet['D1'] = 'POINTS'
+        sheet['E1'] = 'CREATED ON'
+        i = 1
+        for row in results:
+            i += 1
+            j = 1
+            for col in row:
+                cell = sheet.cell(row = i, column = j)
+                cell.value = col
+                j += 1
+
+        book.save(file_path)
+        conn.close()
+        print("Excel file saved successfully.")
+    else:
+        print("No file path selected.")
+    r.destroy()
+
+
+
+def top30per():
+    conn = sqlite3.connect(filepathof_database+'\pingtowinggz.db')
+    cur = conn.cursor()
+    cur.execute("SELECT * FROM customer_detail ORDER by points desc LIMIT (30*(SELECT COUNT(*) as count_pet FROM customer_detail)/100)")
+    conn.commit()
+    s=cur.fetchall()
+    results=s
+    print(s)
+
+    r = Tk()
+
+    # Hide the root window
+    r.withdraw()
+
+    # Ask the user to choose a file for saving
+    file_path = asksaveasfilename(defaultextension='.xlsx')
+
+    # Check if a file path was chosen
+    if file_path:
+        # Create a new workbook
+
+        book = openpyxl.Workbook()
+        sheet = book.active
+        sheet['A1'] = 'ID'
+        sheet['B1'] = 'NAME'
+        sheet['C1'] = 'MOBILE NUMBER'
+        sheet['D1'] = 'POINTS'
+        sheet['E1'] = 'CREATED ON'
+        i = 1
+        for row in results:
+            i += 1
+            j = 1
+            for col in row:
+                cell = sheet.cell(row = i, column = j)
+                cell.value = col
+                j += 1
+
+        book.save(file_path)
+        conn.close()
+        print("Excel file saved successfully.")
+    else:
+        print("No file path selected.")
+    r.destroy()
+
+
+def top20per():
+    conn = sqlite3.connect(filepathof_database+'\pingtowinggz.db')
+    cur = conn.cursor()
+    cur.execute("SELECT * FROM customer_detail ORDER by points desc LIMIT (20*(SELECT COUNT(*) as count_pet FROM customer_detail)/100)")
+    conn.commit()
+    s=cur.fetchall()
+    results=s
+    print(s)
+
+    r = Tk()
+
+    # Hide the root window
+    r.withdraw()
+
+    # Ask the user to choose a file for saving
+    file_path = asksaveasfilename(defaultextension='.xlsx')
+
+    # Check if a file path was chosen
+    if file_path:
+        # Create a new workbook
+
+        book = openpyxl.Workbook()
+        sheet = book.active
+        sheet['A1'] = 'ID'
+        sheet['B1'] = 'NAME'
+        sheet['C1'] = 'MOBILE NUMBER'
+        sheet['D1'] = 'POINTS'
+        sheet['E1'] = 'CREATED ON'
+        i = 1
+        for row in results:
+            i += 1
+            j = 1
+            for col in row:
+                cell = sheet.cell(row = i, column = j)
+                cell.value = col
+                j += 1
+
+        book.save(file_path)
+        conn.close()
+        print("Excel file saved successfully.")
+    else:
+        print("No file path selected.")
+    r.destroy()
+
+
+
+def top10per():
+    conn = sqlite3.connect(filepathof_database+'\pingtowinggz.db')
+    cur = conn.cursor()
+    cur.execute("SELECT * FROM customer_detail ORDER by points desc LIMIT (10*(SELECT COUNT(*) as count_pet FROM customer_detail)/100)")
+    conn.commit()
+    s=cur.fetchall()
+    results=s
+    print(s)
+
+    r = Tk()
+
+    # Hide the root window
+    r.withdraw()
+
+    # Ask the user to choose a file for saving
+    file_path = asksaveasfilename(defaultextension='.xlsx')
+
+    # Check if a file path was chosen
+    if file_path:
+        # Create a new workbook
+
+        book = openpyxl.Workbook()
+        sheet = book.active
+        sheet['A1'] = 'ID'
+        sheet['B1'] = 'NAME'
+        sheet['C1'] = 'MOBILE NUMBER'
+        sheet['D1'] = 'POINTS'
+        sheet['E1'] = 'CREATED ON'
+        i = 1
+        for row in results:
+            i += 1
+            j = 1
+            for col in row:
+                cell = sheet.cell(row = i, column = j)
+                cell.value = col
+                j += 1
+
+        book.save(file_path)
+        conn.close()
+        print("Excel file saved successfully.")
+    else:
+        print("No file path selected.")
+    r.destroy()
+
+
+def generate_QR():
+    print("top 10 percent")
+
+def top10():
+    conn = sqlite3.connect(filepathof_database+'\pingtowinggz.db')
+    cur = conn.cursor()
+    cur.execute("SELECT * FROM customer_detail ORDER by points desc LIMIT 10")
+    conn.commit()
+    s=cur.fetchall()
+    results=s
+    print(s)
+
+    r = Tk()
+
+    # Hide the root window
+    r.withdraw()
+
+    # Ask the user to choose a file for saving
+    file_path = asksaveasfilename(defaultextension='.xlsx')
+
+    # Check if a file path was chosen
+    if file_path:
+        # Create a new workbook
+
+        book = openpyxl.Workbook()
+        sheet = book.active
+        sheet['A1'] = 'ID'
+        sheet['B1'] = 'NAME'
+        sheet['C1'] = 'MOBILE NUMBER'
+        sheet['D1'] = 'POINTS'
+        sheet['E1'] = 'CREATED ON'
+        i = 1
+        for row in results:
+            i += 1
+            j = 1
+            for col in row:
+                cell = sheet.cell(row = i, column = j)
+                cell.value = col
+                j += 1
+
+        book.save(file_path)
+        conn.close()
+        print("Excel file saved successfully.")
+    else:
+        print("No file path selected.")
+    r.destroy()
+
+
+def top20():
+    conn = sqlite3.connect(filepathof_database+'\pingtowinggz.db')
+    cur = conn.cursor()
+    cur.execute("SELECT * FROM customer_detail ORDER by points desc LIMIT 20")
+    conn.commit()
+    s=cur.fetchall()
+    results=s
+    print(s)
+
+    r = Tk()
+
+    # Hide the root window
+    r.withdraw()
+
+    # Ask the user to choose a file for saving
+    file_path = asksaveasfilename(defaultextension='.xlsx')
+
+    # Check if a file path was chosen
+    if file_path:
+        # Create a new workbook
+
+        book = openpyxl.Workbook()
+        sheet = book.active
+        sheet['A1'] = 'ID'
+        sheet['B1'] = 'NAME'
+        sheet['C1'] = 'MOBILE NUMBER'
+        sheet['D1'] = 'POINTS'
+        sheet['E1'] = 'CREATED ON'
+        i = 1
+        for row in results:
+            i += 1
+            j = 1
+            for col in row:
+                cell = sheet.cell(row = i, column = j)
+                cell.value = col
+                j += 1
+
+        book.save(file_path)
+        conn.close()
+        print("Excel file saved successfully.")
+    else:
+        print("No file path selected.")
+    r.destroy()
+
+
+def top30():
+    conn = sqlite3.connect(filepathof_database+'\pingtowinggz.db')
+    cur = conn.cursor()
+    cur.execute("SELECT * FROM customer_detail ORDER by points desc LIMIT 30")
+    conn.commit()
+    s=cur.fetchall()
+    results=s
+    print(s)
+
+    r = Tk()
+
+    # Hide the root window
+    r.withdraw()
+
+    # Ask the user to choose a file for saving
+    file_path = asksaveasfilename(defaultextension='.xlsx')
+
+    # Check if a file path was chosen
+    if file_path:
+        # Create a new workbook
+
+        book = openpyxl.Workbook()
+        sheet = book.active
+        sheet['A1'] = 'ID'
+        sheet['B1'] = 'NAME'
+        sheet['C1'] = 'MOBILE NUMBER'
+        sheet['D1'] = 'POINTS'
+        sheet['E1'] = 'CREATED ON'
+        i = 1
+        for row in results:
+            i += 1
+            j = 1
+            for col in row:
+                cell = sheet.cell(row = i, column = j)
+                cell.value = col
+                j += 1
+
+        book.save(file_path)
+        conn.close()
+        print("Excel file saved successfully.")
+    else:
+        print("No file path selected.")
+    r.destroy()
+
+ #=================================SEND QR CODE PARTY
+
+def sendtoparty():
+    mbl=e.get()
+    import glob
+    import segno
+
+    no='7905398800'
+    conn = sqlite3.connect(filepathof_database+'\pingtowinggz.db')
+    cur = conn.cursor()
+    cur.execute('SELECT * from customer_point_transaction WHERE mobile_number="'+mbl+'"')
+    conn.commit()
+    results=cur.fetchall()
+    print(results)
+
+    #conn = sqlite3.connect('pingtowinggz.db')
+    #cur = conn.cursor()
+    #cur.execute("SELECT * FROM customer_detail ORDER by points ASC LIMIT 10")
+    #conn.commit()
+    #s=cur.fetchall()
+    #results=s
+    #print(s)
+
+
+
+
+    #Api="http://127.0.0.1:8082/send_att?mobile="+mbl+"&message="+message+"&attach="+attach
+    #whatsAppHitApi = requests.get(Api)
+    #print(whatsAppHitApi)
+
+
+#=================================================================Button Middle
+
+button30 = Button(
+    root,
+    text = "buttom 30",
+    width=15,
+    compound=RIGHT,
+    command = button30
+    )
+#button30.grid(row=0, column=3)
+button30.place(x=425,y=90)
+
+button31 = Button(
+    root,
+    text = "buttom 20",
+    width=15,
+    compound=RIGHT,
+    command = button20
+    )
+#button30.grid(row=0, column=3)
+button31.place(x=555,y=90)
+
+button32 = Button(
+    root,
+    text = "Buttom 10 ",
+    width=15,
+    compound=RIGHT,
+    command = button10
+    )
+#button30.grid(row=0, column=3)
+button32.place(x=685,y=90)
+
+#=================================================================Button Middle
+
+button1 = Button(
+    root,
+    text = "Top 10 %",
+    width=15,
+    compound=RIGHT,
+    command = top10per
+    )
+button1.grid(row=0, column=1, padx=10, pady=5)
+
+button2 = Button(
+    root,
+    text = "Top 20 %",
+    width=15,
+    compound=RIGHT,
+    command = top20per
+    )
+button2.grid(row=0, column=2, padx=10)
+
+button3 = Button(
+    root,
+    text = "Top 30 %",
+    width=15,
+    compound=RIGHT,
+    command = top30per
+    )
+button3.grid(row=0, column=3, padx=10)
+
+#=================================================================Button Upper
+
+button30 = Button(
+    root,
+    text = "buttom 30%",
+    width=15,
+    compound=RIGHT,
+    command = button30per
+    )
+#button30.grid(row=0, column=3)
+button30.place(x=425,y=150)
+
+button31 = Button(
+    root,
+    text = "buttom 20%",
+    width=15,
+    compound=RIGHT,
+    command = button20per
+    )
+#button30.grid(row=0, column=3)
+button31.place(x=555,y=150)
+
+button32 = Button(
+    root,
+    text = "Buttom 10% ",
+    width=15,
+    compound=RIGHT,
+    command = button10per
+    )
+#button30.grid(row=0, column=3)
+button32.place(x=685,y=150)
+
+#=================================================================Button Lower
+
+button30 = Button(
+    root,
+    text = "Most Visit",
+    width=15,
+    compound=RIGHT,
+    command = mostvisit
+    )
+#button30.grid(row=0, column=3)
+button30.place(x=425,y=260)
+
+button41 = Button(
+    root,
+    text = "Monthly",
+    width=15,
+    compound=RIGHT,
+    command = generate_QR
+    )
+#button30.grid(row=0, column=3)
+button41.place(x=555,y=260)
+
+button42 = Button(
+    root,
+    text = "Weekly",
+    width=15,
+    compound=RIGHT,
+    command = generate_QR
+    )
+#button30.grid(row=0, column=3)
+button42.place(x=685,y=260)
+
+#=================================================================Button Lower
+
+button30 = Button(
+    root,
+    text = "top 10",
+    width=15,
+    compound=RIGHT,
+    command = top10
+    )
+#button30.grid(row=0, column=3)
+button30.place(x=425,y=320)
+
+button41 = Button(
+    root,
+    text = "top 20",
+    width=15,
+    compound=RIGHT,
+    command = top20
+    )
+#button30.grid(row=0, column=3)
+button41.place(x=555,y=320)
+
+button42 = Button(
+    root,
+    text = "top 30",
+    width=15,
+    compound=RIGHT,
+    command = top30
+    )
+#button30.grid(row=0, column=3)
+button42.place(x=685,y=320)
+#=============================WHATSAPPP SEND BUTTON
+
+original_path = filepathof_database
+
+new_path = os.path.dirname(original_path)
+
+
+datapath=new_path = os.path.join(new_path, "cusomrepo")
+
+print(datapath)
+
+iconpath=os.path.join(datapath, "whatsapp (2).png")
+
+photo=PhotoImage(file=iconpath)
+img=photo.subsample(5,5)
+
+button3 = Button(
+    root,
+    image=img,
+    text = "Send To Customer",
+    width=120,
+    compound=LEFT,
+    command = sendtoparty,
+    )
+button3.place(x=600,y=460)
+
+#=====================CUSTOMER NAME LABEL
+
+lbl=Label(text="Customer No.")
+lbl.place(x=435,y=420)
+
+e=Entry()
+e.place(x=435,y=460)
+
+
+
+#=================================================================Button Lower
+
+
+from datetime import date
+today = str(date.today())
+print(today)
+
+l1 = [
+    {"text": "Name", "stretch": False},
+    "Mobile No.",
+    {"text":"Points"},
+    {"text":"Joining Date"},
+    {"text": "DOB", "stretch": False}
+
+]
+r_set = row
+
+dv = ttk.tableview.Tableview(
+    master=root,
+    paginated=True,
+    coldata=l1,
+    rowdata=r_set,
+    searchable=True,
+    bootstyle=SUCCESS,
+    pagesize=20,
+    height=20,
+)
+dv.grid(row=0, column=0, padx=10, pady=5)
+dv.autofit_columns()
+root.mainloop()

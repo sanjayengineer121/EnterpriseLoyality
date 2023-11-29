@@ -1,0 +1,236 @@
+import ttkbootstrap as ttk
+from ttkbootstrap.tableview import Tableview
+from ttkbootstrap.constants import *
+import sqlite3
+import json
+import ttkbootstrap as tb
+from ttkbootstrap import Window, Style
+import ttkbootstrap as tb
+import pandas as pd
+import matplotlib.pyplot as plt
+from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
+
+def change_theme(theme_name):
+    style.theme_use(theme_name)
+
+# tb.Window(themename="solar")
+root = tb.Window()
+root.geometry("1050x550")  #width and height
+root.resizable(FALSE,FALSE)
+root.title("Monthly Data & Graph")
+
+style = Style(theme='solar')  # Set the initial theme
+
+# Create a function to change the theme when the button is clicked
+theme_options = ['flatly', 'cyborg', 'cosmo', 'darkly', 'journal', 'solar', 'superhero', 'morph', 'yeti', 'united', 'sandstone', 'pulse', 'minty', 'lumen', 'litera', 'flatly']
+
+# Create a label to describe the theme changer
+label = tb.Label(root, text="Change Theme")
+
+# Create a dropdown menu for theme selection
+theme_var = tb.StringVar()
+theme_var.set(style.theme_use())  # Set the initial value to the current theme
+theme_menu = tb.OptionMenu(root, theme_var, *theme_options, command=lambda x: change_theme(theme_var.get()))
+
+# Create a button to apply the selected theme
+apply_button = tb.Button(root, text="Apply Theme",style='success.Outline.TButton', command=lambda: change_theme(theme_var.get()))
+
+# Place the label, theme menu, and button on the right side
+label.pack(side="right")
+label.place(x=950,y=15)
+theme_menu.pack(side="right")
+theme_menu.place(x=845,y=10)
+apply_button.pack(side="right")
+apply_button.place(x=720,y=10)
+
+d = open('path.json')
+
+# returns JSON object as
+# a dictionary
+data = json.load(d)
+
+filepathof_database=data['filepath']
+
+print(filepathof_database)
+
+
+import tkinter as tk
+
+DB_NAME=filepathof_database+"\pingtowinggz.db"
+
+#-----------------------------------------Last 7 Days
+def get_last_7_days_sales():
+    conn = sqlite3.connect(DB_NAME)
+    cursor = conn.cursor()
+
+    query = 'SELECT strftime("%Y-%m-%d", created_on) AS sale_date, SUM(bill_amount) AS total_sales FROM customer_point_transaction WHERE created_on >= date("2022-09-02", "-7 days") GROUP BY sale_date ORDER BY sale_date'
+
+    cursor.execute(query)
+    data = cursor.fetchall()
+    conn.close()
+    return data
+
+#-------------------------------------------------Month Wise
+def get_monthly_sales():
+    conn = sqlite3.connect(DB_NAME)
+    cursor = conn.cursor()
+
+    query = 'SELECT strftime("%Y-%m", created_on) AS sale_month, SUM(bill_amount) AS total_sales FROM customer_point_transaction WHERE created_on >= date("now", "-12 months") GROUP BY sale_month ORDER BY sale_month'
+
+    cursor.execute(query)
+    data = cursor.fetchall()
+    conn.close()
+    return data
+
+def get_last_30_days_sales():
+    conn = sqlite3.connect(DB_NAME)
+    cursor = conn.cursor()
+
+    query = 'SELECT strftime("%Y-%m-%d", created_on) AS sale_date, SUM(bill_amount) AS total_sales FROM customer_point_transaction WHERE created_on >= date("2022-09-02", "-30 days") GROUP BY sale_date ORDER BY sale_date'
+
+    cursor.execute(query)
+    data = cursor.fetchall()
+    conn.close()
+    return data
+
+MOnth_sales_data=get_monthly_sales()
+month = [sale[0] for sale in MOnth_sales_data]
+total_sales = [sale[1] for sale in MOnth_sales_data]
+
+data2 = {'Month': month,
+         'Total Sales': total_sales
+         }
+print(data2)
+df2 = pd.DataFrame(data2)
+
+print("------------------------------")
+print(df2)
+
+figure2 = plt.Figure(figsize=(5, 4), dpi=85)
+ax2 = figure2.add_subplot(111)
+line2 = FigureCanvasTkAgg(figure2, root)
+line2.get_tk_widget().grid(row=0, column=2, padx=10, pady=5)
+df2 = df2[['Month', 'Total Sales']].groupby('Month').sum()
+df2.plot(kind='line', legend=True, ax=ax2, color='r', marker='o', fontsize=10)
+ax2.set_title('Month Vs. Total Sales')
+
+
+con1 = sqlite3.connect(DB_NAME)
+
+cur1 = con1.cursor()
+
+cur1.execute("SELECT name,mobile,points,created_on,dob from customer_detail")
+
+row = cur1.fetchall()
+
+conn = sqlite3.connect(DB_NAME)
+cur = conn.cursor()
+cur.execute("SELECT COUNT(*) as count_pet FROM customer_detail")
+conn.commit()
+s=cur.fetchall()
+
+cur1 = conn.cursor()
+cur1.execute("SELECT COUNT(*) as count_pet FROM customer_detail")
+conn.commit()
+totalamo=cur1.fetchall()
+
+
+conn = sqlite3.connect(DB_NAME)
+cur = conn.cursor()
+
+import datetime
+x='{dt.month}/{dt.day}/{dt.year}'.format(dt = datetime.datetime.now())
+
+cur2 = conn.cursor()
+cur2.execute("SELECT SUM(points) FROM customer_detail")
+conn.commit()
+totalamo=cur2.fetchall()
+totalamount=str(totalamo[0])[1:-2]
+
+mete=tb.Meter(root,bootstyle="success",
+subtext="Total Customer",
+border="2px",
+interactive=True,
+stripethickness=10,
+amounttotal=str(s[0])[1:-2],
+amountused=str(s[0])[1:-2],
+metersize=150,)
+mete.place(x=868,y=60)
+
+mq=tb.Meter(root,bootstyle="success",
+subtext="Total Points",
+border="2px",
+interactive=True,
+stripethickness=10,
+textleft="₹",
+amounttotal=(int(float(totalamount))),
+amountused=(int(float(totalamount))),
+metersize=150,)
+mq.place(x=868,y=220)
+
+import datetime
+x='{dt.month}/{dt.day}/{dt.year}'.format(dt = datetime.datetime.now())
+
+cur2 = conn.cursor()
+cur2.execute("SELECT sum(points) from customer_detail WHERE created_on='"+x+"'")
+conn.commit()
+todayamo=cur2.fetchall()
+todayamount=str(todayamo[0])[1:-2]
+#print(todayamount)
+
+
+if todayamount=="None":
+	todayamount1="0"
+
+	mq1=tb.Meter(root,bootstyle="success",
+	subtext="Today Points",
+	border="2px",
+	interactive=True,
+	stripethickness=10,
+	textleft="₹",
+	amounttotal=100,
+	amountused=0,
+	metersize=150,)
+	mq1.place(x=868,y=380)
+else:
+	todayamount1=str(todayamo[0])[1:-2]
+	mq1=tb.Meter(root,bootstyle="success",
+	subtext="Today Points",
+	border="2px",
+	interactive=True,
+	stripethickness=10,
+	textleft="₹",
+	amounttotal=int(todayamount1),
+	amountused=int(todayamount1),
+	metersize=150,)
+	mq1.place(x=868,y=380)
+
+
+
+from datetime import date
+today = str(date.today())
+print(today)
+
+l1 = [
+    {"text":"Name","stretch":True},
+    "Mobile",
+    "Points",
+    {"text":"Joining Date"},
+    {"text":"DOB"}
+]  # Columns with Names and style
+# Data rows as list
+r_set = row
+
+dv = ttk.tableview.Tableview(
+    master=root,
+    paginated=True,
+    coldata=l1,
+    rowdata=r_set,
+    searchable=True,
+    bootstyle=SUCCESS,
+    pagesize=20,
+    height=20,
+)
+dv.grid(row=0, column=0, padx=10, pady=5)
+dv.autofit_columns()
+root.mainloop()

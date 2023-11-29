@@ -1,0 +1,367 @@
+import ttkbootstrap as tb
+from ttkbootstrap.tableview import Tableview
+from ttkbootstrap.constants import *
+import sqlite3
+import tkinter as tk
+from tkinter import ttk
+from PIL import Image, ImageTk
+from ttkwidgets.autocomplete import AutocompleteCombobox
+import requests
+from ttkbootstrap import Window, Style
+import ttkbootstrap as tb
+from itertools import cycle
+from PIL import Image, ImageTk
+import json,os
+
+
+d = open('path.json')
+
+# returns JSON object as
+# a dictionary
+data = json.load(d)
+
+
+# Connect to the database
+
+filepathof_database=data['filepath']
+print(filepathof_database)
+
+original_path = filepathof_database
+
+new_path = os.path.dirname(original_path)
+
+new=os.path.join(new_path, "offer")
+
+
+
+
+def coupan():
+    import os
+    newc=os.path.join(new, "coupans.py")
+    print(newc)
+    command = f'python "{newc}"'
+    
+    os.system(command)
+
+def MonthlyTar():
+    import os
+    
+    newc1=os.path.join(new, "month_rw.py")
+    print(newc1)
+    command1 = f'python "{newc1}"'
+    
+    os.system(command1)
+
+def Purchben():
+    import os
+    newc2=os.path.join(new, "purchaseben.py")
+    print(newc2)
+    command2 = f'python "{newc2}"'
+    os.system(command2)
+    
+def redeemc():
+    import os
+    newc3=os.path.join(new, "redeemc.py")
+    print(newc3)
+    command2 = f'python "{newc3}"'
+    os.system(command2)
+    
+
+def sendtoparty():
+    ph_no=my_entry.get()
+    msg="this is a coupans code"
+    attach='coupon_image5.png'
+    import os
+    x=os.path.abspath('coupon_image5.png')
+    Api="http://127.0.0.1:8082/send_att?mobile="+ph_no+"&message="+msg+"&attach="+x
+    whatsAppHitApi = requests.get(Api)
+    print(whatsAppHitApi)
+
+db_path=os.path.join(filepathof_database, "pingtowinggz.db")
+
+
+def change_theme(theme_name):
+    style.theme_use(theme_name)
+
+# tb.Window(themename="solar")
+root = tb.Window()
+root.geometry("1050x550")  # width and height
+root.resizable(FALSE,FALSE)
+root.title("offers & Coupans")
+
+
+navbar_frame = ttk.Frame(root, style="My.TFrame")
+navbar_frame.pack(fill="x")
+
+navbar_label = ttk.Label(navbar_frame, text="Loyality", font=("Helvetica", 16, "bold"))
+navbar_label.grid(row=0, column=0, padx=10, pady=5)
+
+button1 = tb.Button(
+    navbar_frame,
+    # image=img,
+    text = "Coupans",
+    width=20,
+    compound=LEFT,
+    style='INFO.Outline.TButton',
+    command = coupan,
+    )
+button1.grid(row=0, column=1, padx=10, pady=5)
+
+button2 = tb.Button(
+    navbar_frame,
+    # image=img,
+    text = "Redeem Coupans",
+    width=20,
+    compound=LEFT,
+    style='INFO.Outline.TButton',
+    command = redeemc,
+    )
+button2.grid(row=0, column=2, padx=10, pady=5)
+
+button22 = tb.Button(
+    navbar_frame,
+    # image=img,
+    text = "Monthly Target",
+    width=20,
+    compound=LEFT,
+    style='INFO.Outline.TButton',
+    command = MonthlyTar,
+    )
+button22.grid(row=0, column=3, padx=10, pady=5)
+
+button242 = tb.Button(
+    navbar_frame,
+    # image=img,
+    text = "Purchased Benefit",
+    width=20,
+    compound=LEFT,
+    style='INFO.Outline.TButton',
+    command = Purchben,
+    )
+button242.grid(row=0, column=4, padx=10, pady=5)
+
+
+
+
+
+style = Style(theme='solar')  # Set the initial theme
+
+# Create a function to change the theme when the button is clicked
+theme_options = ['flatly', 'cyborg', 'cosmo', 'darkly', 'journal', 'solar', 'superhero', 'morph', 'yeti', 'united', 'sandstone', 'pulse', 'minty', 'lumen', 'litera', 'flatly']
+
+# Create a label to describe the theme changer
+label = tb.Label(root, text="Change Theme")
+
+# Create a dropdown menu for theme selection
+theme_var = tb.StringVar()
+theme_var.set(style.theme_use())  # Set the initial value to the current theme
+theme_menu = tb.OptionMenu(root, theme_var, *theme_options, command=lambda x: change_theme(theme_var.get()))
+
+# Create a button to apply the selected theme
+#apply_button = tb.Button(root, width=10,text="Apply Theme",style='success.Outline.TButton', command=lambda: change_theme(theme_var.get()))
+
+# Place the label, theme menu, and button on the right side
+label.pack(side="right")
+label.place(x=950,y=15)
+theme_menu.pack(side="right")
+theme_menu.place(x=845,y=10)
+#apply_button.pack(side="right")
+#apply_button.place(x=720,y=10)
+
+
+con1 = sqlite3.connect(db_path)
+
+cur1 = con1.cursor()
+
+cur1.execute("SELECT id,name,mobile,points FROM customer_detail")
+
+row = cur1.fetchall()
+
+
+
+
+conn = sqlite3.connect(db_path)
+cur = conn.cursor()
+cur.execute("SELECT COUNT(*) as count_pet FROM customer_detail")
+conn.commit()
+s=cur.fetchall()
+
+cur1 = conn.cursor()
+cur1.execute("SELECT COUNT(*) as count_pet FROM customer_detail")
+conn.commit()
+totalamo=cur1.fetchall()
+
+
+conn = sqlite3.connect(db_path)
+cur = conn.cursor()
+
+import datetime
+x='{dt.month}/{dt.day}/{dt.year}'.format(dt = datetime.datetime.now())
+
+cur2 = conn.cursor()
+cur2.execute("SELECT SUM(points) FROM customer_detail")
+conn.commit()
+totalamo=cur2.fetchall()
+totalamount=str(totalamo[0])[1:-2]
+totalamount=1349553
+
+mete=tb.Meter(root,bootstyle="success",
+subtext="No. Of Customer",
+border="2px",
+interactive=True,
+stripethickness=10,
+amounttotal=str(s[0])[1:-2],
+amountused=str(s[0])[1:-2],
+metersize=150,)
+mete.place(x=868,y=110)
+
+mq=tb.Meter(root,bootstyle="success",
+subtext="Total Points",
+border="2px",
+interactive=True,
+stripethickness=10,
+textleft="₹",
+amounttotal=int(totalamount),
+amountused=int(totalamount),
+metersize=150,)
+mq.place(x=868,y=300)
+
+import datetime
+x='{dt.month}/{dt.day}/{dt.year}'.format(dt = datetime.datetime.now())
+
+
+from datetime import date
+today = str(date.today())
+print(today)
+
+
+
+# Load the image ("coupon_image5.png")
+
+img1=os.path.join(new_path, "images\iamges1.jpg")
+img2=os.path.join(new_path, "images\iamges2.jpg")
+img3=os.path.join(new_path, "images\iamges3.jpg")
+img4=os.path.join(new_path, "images\iamges4.jpg")
+img5=os.path.join(new_path, "images\iamges5.jpg")
+
+image_paths = [img1,img2,img3,img4,img5]# Replace with your image file paths using double backslashes
+
+class ImageSlider:
+    def __init__(self, root):
+        self.root = root
+        # Set canvas size to 480x240 pixels
+        self.canvas = tb.Canvas(root, width=480, height=240)
+        self.canvas.grid(row=0, column=2, padx=10, pady=5)
+
+        # Load images and resize to 480x240 pixels
+        self.images = [Image.open(path).resize((480, 240), Image.ANTIALIAS) for path in image_paths]
+        self.photo_images = [ImageTk.PhotoImage(image) for image in self.images]
+
+        # Create a label to display images
+        self.image_label = self.canvas.create_image(0, 0, anchor=tk.NW, image=self.photo_images[0])
+
+        # Create a timer to change images automatically
+        self.current_image = 0
+        self.image_cycle = cycle(range(len(self.images)))
+        self.root.after(3000, self.change_image)  # Change image every 3 seconds
+
+    def change_image(self):
+        self.current_image = next(self.image_cycle)
+        self.canvas.itemconfig(self.image_label, image=self.photo_images[self.current_image])
+        self.root.after(3000, self.change_image)  # Change image every 3 seconds
+
+def load_selected_data(event):
+    # Get the selected title from the listbox
+    selected_title = listbox.get(listbox.curselection())
+
+    # Connect to the SQLite database (replace with your database details)
+    connection = sqlite3.connect("your_database.db")
+    cursor = connection.cursor()
+
+    # Execute SQL SELECT statement to get data for the selected title
+    select_data_query = "SELECT * FROM your_table WHERE title = ?"
+    cursor.execute(select_data_query, (selected_title,))
+    data = cursor.fetchone()
+
+    # Populate the entry widgets with the retrieved data
+    title_entry.delete(0, tk.END)
+    title_entry.insert(0, data[0])  # Assuming the first column is 'title'
+    num_of_days_entry.delete(0, tk.END)
+    num_of_days_entry.insert(0, data[1])  # Assuming the second column is 'num_of_days'
+    # ... Repeat for other entry widgets ...
+
+    # Close the connection
+    connection.close()
+
+
+
+l1 = [
+    {"text": "Title", "stretch": False},
+    "No. of days",
+    "Befor Days",
+    "After Days",
+    "Expiry Date",
+    {"text":"Type"},
+    {"text":"Status"},
+    {"text": "Action", "stretch": False}
+]
+r_set = row
+
+dv = tb.tableview.Tableview(
+    master=root,
+    paginated=True,
+    coldata=l1,
+    rowdata=r_set,
+    searchable=True,
+    bootstyle=SUCCESS,
+    pagesize=10,
+    height=10,
+)
+dv.place(x=100,y=100)
+dv.autofit_columns()
+
+#=================================================
+
+conn = sqlite3.connect(db_path)
+print("Connection.")
+#==============================payment/acceptance method
+x = conn.cursor()
+x.execute("SELECT mobile FROM customer_detail")
+col=x.fetchall()
+c=[]
+#print(col)
+for i in col:
+    x=str(i)[2:-3]
+
+    c.append(x)
+
+countries=c
+
+e1_str1=tb.StringVar()
+# Create GUI
+
+#my_label = tb.Label(root, text='Customer Mobile Number',font = ('anydore',18))
+#my_label.place(x=400,y=360)
+frame = tb.Frame(root)
+frame.place(x=400,y=390)
+
+my_entry = AutocompleteCombobox(
+    frame,
+    width=15,
+    font=('Times', 18),
+    completevalues=countries
+    )
+#my_entry.pack()
+
+#=============================WHATSAPPP SEND BUTTON
+
+
+# from tkinter import *
+
+# photo=PhotoImage(file="whatsapp (2).png")
+# img=photo.subsample(5,5)
+
+
+
+#app = ImageSlider(root)
+root.mainloop()

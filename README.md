@@ -1,7 +1,7 @@
 # EnterpriseLoyality
 A loyalty program is a marketing strategy designed to encourage customers to continue to shop at or use the services of a business associated with the program.
 
- # Daily a/c Report
+ # Enterprise Loyality
 
 <h1 align="center">Hello 👋, New Dashboard</h1>
 
@@ -13,191 +13,379 @@ A loyalty program is a marketing strategy designed to encourage customers to con
 
 Dashboards are useful across different industries and verticals because they’re highly customizable. They can include data of all sorts with varying date ranges to help you understand: what happened, why it happened, what may happen, and what action you should take. And since dashboards use visualizations like [tables](https://www.tableau.com/data-insights/reference-library/visual-analytics/tables), graphs, and [charts](https://www.tableau.com/data-insights/reference-library/visual-analytics/charts), others who aren’t as close to the data can quickly and easily understand the story it tells or the insights it reveals</p>
 
-<img src="[https://drive.google.com/file/d/1QFiKLyzEgi2EuwEtACFTj4d5MFS_InWh/view](https://drive.google.com/file/d/1QFiKLyzEgi2EuwEtACFTj4d5MFS_InWh/view?usp=drive_link)" height="480px" width="1000px">
+<img src="https://github.com/sanjayengineer121/EnterpriseLoyality/blob/main/offer/Images/19.12.2023_15.59.59_REC.png" height="480px" width="1000px">
 
 <h1 align="center">👋, New  UI for Customer Reports and Points and Transaction Reports</h1>
 
-<p>What is a QR Code generator? It is a niche tool that is used to generate different types of QR Codes. Depending on your purpose, you can use our generator to create QR Codes to open a website, view a PDF file, listen to music, watch Youtube videos, store image files, connect to a WiFi network, and much more. Explore the different types here.</p>
+# Loyalty Program Dashboard
 
-**Liberary Used**
---ask file save
---python tkinter
---pyqrcode
---pillow
---scale
---png save
---bind
+## Customer Reports
+
+### Customer Overview
+
+#### Total Customers:
+<span>{Total Customers}</span>
+
+#### Active Customers:
+<span>{Active Customers}</span>
+
+#### Inactive Customers:
+<span>{Inactive Customers}</span>
+
+### Points Overview
+
+#### Total Points Issued:
+<span>{Total Points Issued}</span>
+
+#### Redeemed Points:
+<span>{Redeemed Points}</span>
+
+#### Remaining Points:
+<span>{Remaining Points}</span>
+
+## Transaction Reports
+
+### Recent Transactions
+
+| Transaction ID | Customer Name | Points Earned | Points Redeemed | Date       |
+| -------------- | ------------- | ------------- | --------------- | ---------- |
+| T1234          | John Doe       | 50            | 20              | 2023-03-01 |
+| T1235          | Jane Smith     | 30            | 15              | 2023-03-02 |
+| T1236          | Bob Johnson    | 40            | 25              | 2023-03-03 |
+| T1237          | Alice Brown    | 20            | 10              | 2023-03-04 |
+
+### Customer Details
+
+#### Customer: John Doe
+
+- **Total Points:** <span>{John Doe Total Points}</span>
+- **Points Earned:** <span>{John Doe Points Earned}</span>
+- **Points Redeemed:** <span>{John Doe Points Redeemed}</span>
+- **Last Transaction Date:** <span>{John Doe Last Transaction Date}</span>
+
+#### Customer: Jane Smith
+
+- **Total Points:** <span>{Jane Smith Total Points}</span>
+- **Points Earned:** <span>{Jane Smith Points Earned}</span>
+- **Points Redeemed:** <span>{Jane Smith Points Redeemed}</span>
+- **Last Transaction Date:** <span>{Jane Smith Last Transaction Date}</span>
+
+... (Repeat for each customer)
+
+
 <img src="[https://github.com/sanjayengineer121/Daily_Ac_report/blob/main/img/software%20screenshot/Screenshot%20(399).png](https://drive.google.com/file/d/1NA3hE6uI_xDTTcDeK3vB-Vqy5ecpO2wN/view?usp=sharing)" height="480px" width="1000px">
 
 **after Submit**
 
 <img src="https://github.com/sanjayengineer121/Daily_Ac_report/blob/main/img/software%20screenshot/Screenshot%20(400).png" height="480px" width="1000px">
 
-<h1 align="center">👋, New  UI for QR Scamming/reader</h1>
+<h1 align="center">👋, New  Monthky Reports and Sales </h1>
 
-**What is a QR Code?**
+# Monthly Sales Report
 
-<p>A Quick Response code is a two-dimensional pictographic code used for its fast readability and comparatively large storage capacity. The code consists of black modules arranged in a square pattern on a white background. The information encoded can be made up of any kind of data (e.g., binary, alphanumeric, or Kanji symbols)</p>
+## Overview
 
-**Usage**
+### Total Sales: $ {Total Sales Amount}
 
-<p>From the command line, use the installed qr script:</p>
+### Top Products
 
-qr "Some text" > test.png
+| Product Name     | Units Sold | Revenue     |
+| ---------------- | ----------- | ----------- |
+| Product A        | {Units Sold A} | ${Revenue A} |
+| Product B        | {Units Sold B} | ${Revenue B} |
+| Product C        | {Units Sold C} | ${Revenue C} |
+| ...              | ...         | ...         |
 
-**Liberary Used**
---ask file save
---python tkinter
---pyqrcode
---pillow
---scale
---png save
---bind
+## Monthly Performance
 
-<img src="https://github.com/sanjayengineer121/Daily_Ac_report/blob/main/img/software%20screenshot/Screenshot%20(401).png" height="480px" width="1000px">
+### Monthly Sales Trend
 
-<h1 align="center">👋, New  UI for QR Notes Display And Description</h1>
+![Monthly Sales Trend Chart](link_to_chart_image)
 
-**What is a Notes?**
-<h1>Organize your work and life, finally.</h1>
-<p>Become focused, organized, and calm with Todoist. The world’s #1 task manager and to-do list app.</p>
+### Sales Channels
 
-<h1 align="center">Todoist: To-Do List & Planner </h1>
+#### Online Sales
 
-**Add your tasks.**
-**Organize your life.**
-**Achieve more every day.**
-<p>Add tasks like “Read work emails every day at 10am” to fill your to-do list in seconds using Todoist’s powerful natural language recognition and recurring dates.</p>
+- **Total Online Sales:** $ {Online Sales Amount}
+- **Percentage of Total Sales:** {Percentage Online Sales}
 
-<img src="https://github.com/sanjayengineer121/Daily_Ac_report/blob/main/img/software%20screenshot/Screenshot%20(402).png" height="480px" width="1000px">
+#### In-Store Sales
 
-<h1 align="center">👋, New  UI for Adding Customers & Vender Party</h1>
+- **Total In-Store Sales:** $ {In-Store Sales Amount}
+- **Percentage of Total Sales:** {Percentage In-Store Sales}
 
-**What is a Ledger and Why is it Defined as Principle Book of Accounts?**
-<p>Journal is a memorandum book to record transactions date wise. On a particular date, what are total purchases, total sales, debtors, creditors, incomes, expenses may not be known as journal. And to get information about the above, the entries passed in the journal are 
+## Product Performance
 
-An account represents a detailed record of changes that have occurred in a particular asset, liability, expense, loss, gain or capital during the accounting period. All these separate accounts are kept in a loose leaf binder, and the entire group of accounts is called a ledger.</p>
-<h2>Utility of a Ledger</h2>
+### Best-Selling Products
 
-- The ledger is a master record of all the accounts of a business unit
--  It is a principal book of double entry system of accounting which provides all important information
-Separate accounts are maintained based on their nature, so all information relating to transactions may be obtained through ledgers, such as to whom what is payable, from whom what is receivable, what is the position of assets and liabilities of the business
-- Ledger helps us preparing the trial balance to ensure the arithmetical accuracy of the account 
-- Moreover, ledger assists us in preparing trading, profit and loss account and Balance sheet
+| Rank | Product Name | Units Sold | Revenue     |
+| ---- | ------------ | ---------- | ----------- |
+| 1    | Product A     | {Units Sold A} | ${Revenue A} |
+| 2    | Product B     | {Units Sold B} | ${Revenue B} |
+| 3    | Product C     | {Units Sold C} | ${Revenue C} |
+| ...  | ...          | ...        | ...         |
 
-<img src="https://github.com/sanjayengineer121/Daily_Ac_report/blob/main/img/software%20screenshot/Screenshot%20(403).png" height="480px" width="1000px">
+### Low-Performing Products
 
-<h1 align="center">👋, New  UI for Adding Products or Stock Items</h1>
+| Rank | Product Name | Units Sold | Revenue     |
+| ---- | ------------ | ---------- | ----------- |
+| 1    | Product X     | {Units Sold X} | ${Revenue X} |
+| 2    | Product Y     | {Units Sold Y} | ${Revenue Y} |
+| 3    | Product Z     | {Units Sold Z} | ${Revenue Z} |
+| ...  | ...          | ...        | ...         |
 
+## Recommendations
 
-## Stock Items
-<p>A stock item in TallyPrime is required to fill in information about the stock or inventory that your business deals with. Once you have created stock item, you can records your business transactions and keep track of the stock item details. Simply enter the name of the stock item you want to create and save it. Also, provide the opening balance details such as quantity, rate, value applicable tax rates so that you can record transactions in less time, without the need to enter all of these details each time in the transactions</p>
-
-## In this section
-
- Create stock items
-- Delete stock items
-- Create Units for Stock Items
-- Tax rate of stock items
-- Stock items in transactions
-- Opening Stock and Closing Stock values
-
-<img src="https://github.com/sanjayengineer121/Daily_Ac_report/blob/main/img/software%20screenshot/Screenshot%20(404).png" height="480px" width="1000px">
-
-<h1 align="center">👋, New  UI for Adding Units & Measurements</h1>
-
-## Compound Unit of Measure
-
-- Payroll Configurations
-- Enable Payroll
-- Enable Payroll Statutory
-- Define employee category
-- Define employee Groups
-- Create Employees Master Data
-- Create Simple Payroll Units
-- Create Compound Payroll Units
-
-<img src="https://github.com/sanjayengineer121/Daily_Ac_report/blob/main/img/software%20screenshot/Screenshot%20(405).png" height="480px" width="1000px">
-
-<h1 align="center">👋, New  UI for Adding Receipt Voucher</h1>
-
-## Record a Receipt Voucher
-<p>You can use a receipt voucher to record cash and bank receipts. You can record using Single Entry or Double Entry mode.</p>
-
-## Cash receipts
-<p>In business, you might want to record receipts for Commission, Bank Interest, Discounts Received, Receipts from Customers, and so on. TallyPrime allows you to record such cash receipts using Receipt Voucher in single-entry mode. You can use a single-entry mode of accounting if you are unfamiliar with the accounting rules. Once you select the ledgers correctly, TallyPrime automatically records your transaction as per the accounting rules.</p>
-
-## Bank receipts 
-<p>You can receive bank receipts and record them using Receipt Vouchers. Select the Bank account under the Account field and income or party ledger under Particulars. In the Bank Allocation screen, you can specify the transaction type as well as other details such as the instrument number if you received the funds by cheque.</p>
-
-## Receipt Method
-- cash
-- HDFC Bank
-- ICICI Bank
-- "Kotak Mahindra Bank"
-- IndusInd Bank
-- Yes Bank
-- Punjab National Bank
-- Bank Of Baroda
-- State Bank of India
-- Axis Bank Ltd.
-- Bank of India
-- PAYTM BANK
-- PHONE PAY
-- GOOGLE PAY
-
-<img src="https://github.com/sanjayengineer121/Daily_Ac_report/blob/main/img/software%20screenshot/Screenshot%20(406).png" height="480px" width="1000px">
+- Identify and promote top-selling products.
+- Analyze low-performing products for potential improvements.
+- Enhance marketing strategies for online and in-store sales channels.
 
 
-<h1 align="center">👋, New  UI for Adding/Creating Payment Voucher</h1>
 
-## Record a Payment Voucher
-<p>In TallyPrime, you can go to the Payment Register to view the payment entries recorded. It is a monthly report and shows the number of transactions recorded per month. You can drill down and view the transactions recorded, and you can also make changes to the vouchers if required. If you use a Journal Voucher to record your payment transactions, you can view them in the Journal</p>
+<h1 align="center">👋,  UI for Custom reports and Top purchase customer top sale day etc
 
-### You can use a Payment voucher to record cash and bank payments using Entry  mode. 
+</h1>
 
-## In this section
+# Custom Reports
 
-- Cash payment in Payment Voucger
-- Bank payments in Single Entry and you can track all today amount
-- Payments in new Entry mode
-- Provide narration for each ledger in the payment voucher
+## Top Purchase Customers
 
-## Paymentt Method
-- cash
-- HDFC Bank
-- ICICI Bank
-- "Kotak Mahindra Bank"
-- IndusInd Bank
-- Yes Bank
-- Punjab National Bank
-- Bank Of Baroda
-- State Bank of India
-- Axis Bank Ltd.
-- Bank of India
-- PAYTM BANK
-- PHONE PAY
-- GOOGLE PAY
-<img src="https://github.com/sanjayengineer121/Daily_Ac_report/blob/main/img/software%20screenshot/Screenshot%20(407).png" height="480px" width="1000px">
+### Overview
 
-# library Used Majorly and some more
+| Rank | Customer Name | Total Purchases | Total Amount |
+| ---- | ------------- | --------------- | ------------ |
+| 1    | Customer A     | {Total Purchases A} | ${Total Amount A} |
+| 2    | Customer B     | {Total Purchases B} | ${Total Amount B} |
+| 3    | Customer C     | {Total Purchases C} | ${Total Amount C} |
+| ...  | ...           | ...             | ...          |
 
-- tkinter
-- from tkinter import *
-- pyqrcode
-- tkinter.messagebox
-- customtkinter
-- requests
-- webbrowser
-- from ter import filedialog
-- qlite3
-- mport webbrowser
-- from kinter import ttk
-- import tkinter as tk
-- from tkinter import *
-- from tkinter import font
-- from PIL import ImageTk, Image 
-- time
+### Insights
+
+- Identify and appreciate top customers.
+- Tailor special promotions or loyalty rewards for top customers.
+
+## Top Sales Day
+
+### Overview
+
+| Rank | Date          | Total Sales | Total Transactions |
+| ---- | ------------- | ----------- | ------------------ |
+| 1    | {Top Sales Day} | ${Total Sales on Top Day} | {Total Transactions on Top Day} |
+| 2    | {Second Top Day} | ${Total Sales on Second Top Day} | {Total Transactions on Second Top Day} |
+| 3    | {Third Top Day}  | ${Total Sales on Third Top Day} | {Total Transactions on Third Top Day} |
+| ...  | ...           | ...         | ...                |
+
+### Insights
+
+- Analyze factors contributing to the top sales day.
+- Optimize marketing or promotional strategies around peak sales days.
+
+## Custom Analysis
+
+### Overview
+
+| Metric           | Value      |
+| ---------------- | ---------- |
+| Custom Metric 1  | {Value 1}  |
+| Custom Metric 2  | {Value 2}  |
+| Custom Metric 3  | {Value 3}  |
+| ...              | ...        |
+
+### Insights
+
+- Define custom metrics based on specific business goals.
+- Use custom metrics for in-depth analysis and decision-making.
+
+
+
+<h1 align="center">👋, New  UI for Coupan creation and deletion and expiry and assigning and more Customers & Vender Party</h1>
+
+# Coupon Management
+
+## Create Coupon
+
+### Coupon Details
+
+- **Coupon Code:** {Coupon Code}
+- **Discount Type:** {Percentage / Amount}
+- **Discount Value:** {Value}
+- **Expiry Date:** {Expiry Date}
+
+### Usage Restrictions
+
+- **Minimum Purchase Amount:** {Minimum Amount}
+- **Usage Limit per Customer:** {Limit per Customer}
+- **Usage Limit Overall:** {Overall Limit}
+
+### Additional Information
+
+- **Description:** {Coupon Description}
+- **Applicable Products:** {Product Categories / Specific Products}
+
+### Actions
+
+- [Create Coupon]
+
+## Delete Coupon
+
+### Coupon Details
+
+- **Coupon Code:** {Coupon Code}
+
+### Actions
+
+- [Delete Coupon]
+
+## Expire Coupon
+
+### Coupon Details
+
+- **Coupon Code:** {Coupon Code}
+
+### Actions
+
+- [Expire Coupon]
+
+## Assign Coupon to Customer
+
+### Customer Details
+
+- **Customer Name:** {Customer Name}
+- **Customer Email:** {Customer Email}
+
+### Coupon Details
+
+- **Coupon Code:** {Coupon Code}
+
+### Actions
+
+- [Assign Coupon]
+
+## View Coupon Usage Report
+
+### Coupon Details
+
+- **Coupon Code:** {Coupon Code}
+
+### Report
+
+| Customer Name | Email             | Order ID | Discount Amount | Usage Date         |
+| ------------- | ----------------- | -------- | ---------------- | ------------------ |
+| Customer A    | customerA@email.com | {Order ID A} | ${Discount Amount A} | {Usage Date A} |
+| Customer B    | customerB@email.com | {Order ID B} | ${Discount Amount B} | {Usage Date B} |
+| ...           | ...               | ...      | ...              | ...              |
+
+## Custom Actions
+
+### Overview
+
+| Action                 | Description                                          |
+| ---------------------- | ---------------------------------------------------- |
+| [Generate Bulk Coupons] | Create multiple coupons in one go for promotions.    |
+| [Email Coupons]        | Send generated coupons to customers via email.       |
+| [Export Coupon Data]   | Download coupon data for further analysis.           |
+
+
+<img src="https://github.com/sanjayengineer121/EnterpriseLoyality/blob/main/offer/Images/19.12.2023_16.07.14_REC.png" height="480px" width="1000px">
+
+<h1 align="center">👋, New  Closing btton in every options & Features</h1>
+
+# Coupon Management
+
+## Create Coupon
+
+### Coupon Details
+
+- **Coupon Code:** {Coupon Code}
+- **Discount Type:** {Percentage / Amount}
+- **Discount Value:** {Value}
+- **Expiry Date:** {Expiry Date}
+
+### Usage Restrictions
+
+- **Minimum Purchase Amount:** {Minimum Amount}
+- **Usage Limit per Customer:** {Limit per Customer}
+- **Usage Limit Overall:** {Overall Limit}
+
+### Additional Information
+
+- **Description:** {Coupon Description}
+- **Applicable Products:** {Product Categories / Specific Products}
+
+### Actions
+
+- [Create Coupon]
+- [Close]
+
+## Delete Coupon
+
+### Coupon Details
+
+- **Coupon Code:** {Coupon Code}
+
+### Actions
+
+- [Delete Coupon]
+- [Close]
+
+## Expire Coupon
+
+### Coupon Details
+
+- **Coupon Code:** {Coupon Code}
+
+### Actions
+
+- [Expire Coupon]
+- [Close]
+
+## Assign Coupon to Customer
+
+### Customer Details
+
+- **Customer Name:** {Customer Name}
+- **Customer Email:** {Customer Email}
+
+### Coupon Details
+
+- **Coupon Code:** {Coupon Code}
+
+### Actions
+
+- [Assign Coupon]
+- [Close]
+
+## View Coupon Usage Report
+
+### Coupon Details
+
+- **Coupon Code:** {Coupon Code}
+
+### Report
+
+| Customer Name | Email             | Order ID | Discount Amount | Usage Date         |
+| ------------- | ----------------- | -------- | ---------------- | ------------------ |
+| Customer A    | customerA@email.com | {Order ID A} | ${Discount Amount A} | {Usage Date A} |
+| Customer B    | customerB@email.com | {Order ID B} | ${Discount Amount B} | {Usage Date B} |
+| ...           | ...               | ...      | ...              | ...              |
+
+### Actions
+
+- [Close]
+
+## Custom Actions
+
+### Overview
+
+| Action                 | Description                                          |
+| ---------------------- | ---------------------------------------------------- |
+| [Generate Bulk Coupons] | Create multiple coupons in one go for promotions.    |
+| [Email Coupons]        | Send generated coupons to customers via email.       |
+| [Export Coupon Data]   | Download coupon data for further analysis.           |
+
+### Actions
+
+- [Close]
 
 <h1 align="center">👋, Full Code Is available below</h1>
 

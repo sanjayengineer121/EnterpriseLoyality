@@ -13,9 +13,9 @@ A loyalty program is a marketing strategy designed to encourage customers to con
 
 Dashboards are useful across different industries and verticals because they’re highly customizable. They can include data of all sorts with varying date ranges to help you understand: what happened, why it happened, what may happen, and what action you should take. And since dashboards use visualizations like [tables](https://www.tableau.com/data-insights/reference-library/visual-analytics/tables), graphs, and [charts](https://www.tableau.com/data-insights/reference-library/visual-analytics/charts), others who aren’t as close to the data can quickly and easily understand the story it tells or the insights it reveals</p>
 
-<img src="https://github.com/sanjayengineer121/Daily_Ac_report/blob/main/img/software%20screenshot/Screenshot%20(398).png" height="480px" width="1000px">
+<img src="[https://drive.google.com/file/d/1QFiKLyzEgi2EuwEtACFTj4d5MFS_InWh/view](https://drive.google.com/file/d/1QFiKLyzEgi2EuwEtACFTj4d5MFS_InWh/view?usp=drive_link)" height="480px" width="1000px">
 
-<h1 align="center">👋, New  UI for QR Generation</h1>
+<h1 align="center">👋, New  UI for Customer Reports and Points and Transaction Reports</h1>
 
 <p>What is a QR Code generator? It is a niche tool that is used to generate different types of QR Codes. Depending on your purpose, you can use our generator to create QR Codes to open a website, view a PDF file, listen to music, watch Youtube videos, store image files, connect to a WiFi network, and much more. Explore the different types here.</p>
 
@@ -27,7 +27,7 @@ Dashboards are useful across different industries and verticals because they’r
 --scale
 --png save
 --bind
-<img src="https://github.com/sanjayengineer121/Daily_Ac_report/blob/main/img/software%20screenshot/Screenshot%20(399).png" height="480px" width="1000px">
+<img src="[https://github.com/sanjayengineer121/Daily_Ac_report/blob/main/img/software%20screenshot/Screenshot%20(399).png](https://drive.google.com/file/d/1NA3hE6uI_xDTTcDeK3vB-Vqy5ecpO2wN/view?usp=sharing)" height="480px" width="1000px">
 
 **after Submit**
 
